@@ -4,6 +4,15 @@ from .ui import dessiner_choix
 from .utils import WHITE, WINDOW_WIDTH, WINDOW_HEIGHT, charger_image
 
 
+def afficher_score(ecran, police_bouton, etat_partie):
+    score_j = etat_partie.get("score_joueur", 0)
+    score_o = etat_partie.get("score_ordi", 0)
+    texte_score = f"Score — Vous : {score_j}  Ordi : {score_o}"
+    surf_score = police_bouton.render(texte_score, True, (60, 60, 60))
+    rect_score = surf_score.get_rect(topleft=(20, 20))
+    ecran.blit(surf_score, rect_score)
+
+
 def afficher_attente_choix(
     ecran,
     police_bouton,
@@ -16,6 +25,7 @@ def afficher_attente_choix(
 ):
     # Affichage de base
     ecran.fill(WHITE)
+    afficher_score(ecran, police_bouton, etat_partie)
     # Affichage du titre
     surf_titre = police_bouton.render("En attente de choix", True, (0, 0, 0))
     rect_titre = surf_titre.get_rect(center=(WINDOW_WIDTH // 2, 60))
@@ -51,6 +61,7 @@ def afficher_attente_choix(
 
 def afficher_affichage_choix(ecran, police_bouton, etat_partie):
     ecran.fill(WHITE)
+    afficher_score(ecran, police_bouton, etat_partie)
     # Affichage des choix
     texte_joueur = f"Vous : {etat_partie['choix_joueur']}"
     texte_ordi = f"Ordinateur : {etat_partie['choix_ordi']}"
@@ -60,11 +71,9 @@ def afficher_affichage_choix(ecran, police_bouton, etat_partie):
     rect_ordi = surf_ordi.get_rect(center=(2 * WINDOW_WIDTH // 3, 60))
     ecran.blit(surf_joueur, rect_joueur)
     ecran.blit(surf_ordi, rect_ordi)
-    # Petite pause visuelle (optionnel, ici on saute directement au résultat)
     # Calcul du gagnant
     cj = etat_partie["choix_joueur"]
-    # co = etat_partie["choix_ordi"]
-    co = "pierre"
+    co = etat_partie["choix_ordi"]
     if cj == co:
         etat_partie["resultat"] = "egalite"
     elif (
@@ -83,6 +92,7 @@ def afficher_resultat(
     ecran, police_bouton, pos_souris, clic_souris, evenements, etat_partie
 ):
     ecran.fill(WHITE)
+    afficher_score(ecran, police_bouton, etat_partie)
     # Affichage des choix
     texte_joueur = f"Vous : {etat_partie['choix_joueur']}"
     texte_ordi = f"Ordinateur : {etat_partie['choix_ordi']}"
@@ -99,9 +109,17 @@ def afficher_resultat(
     elif etat_partie["resultat"] == "joueur":
         texte_resultat = "Gagnant : Joueur !"
         couleur = (0, 180, 0)
+        # Incrémenter le score du joueur si pas déjà fait
+        if not etat_partie.get("score_incremente", False):
+            etat_partie["score_joueur"] = etat_partie.get("score_joueur", 0) + 1
+            etat_partie["score_incremente"] = True
     elif etat_partie["resultat"] == "ordi":
         texte_resultat = "Gagnant : Ordinateur !"
         couleur = (180, 0, 0)
+        # Incrémenter le score de l'ordi si pas déjà fait
+        if not etat_partie.get("score_incremente", False):
+            etat_partie["score_ordi"] = etat_partie.get("score_ordi", 0) + 1
+            etat_partie["score_incremente"] = True
     else:
         texte_resultat = ""
         couleur = (0, 0, 0)
@@ -127,6 +145,7 @@ def afficher_resultat(
                 etat_partie["choix_joueur"] = None
                 etat_partie["choix_ordi"] = None
                 etat_partie["resultat"] = None
+                etat_partie["score_incremente"] = False
     return etat_partie
 
 
