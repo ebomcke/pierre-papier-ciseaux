@@ -26,7 +26,12 @@ def main():
     police_bouton = pygame.font.SysFont(None, 48)
 
     etat_jeu = "accueil"
-    choix_joueur = None
+    etat_partie = {
+        "choix_joueur": None,
+        "choix_ordi": None,
+        "resultat": None,
+        "manche_terminee": False,
+    }
 
     while True:
         pos_souris = pygame.mouse.get_pos()
@@ -48,18 +53,22 @@ def main():
             )
             etat_jeu = nouvel_etat
             if etat_jeu == "partie":
-                choix_joueur = None  # reset le choix du joueur à chaque nouvelle partie
+                etat_partie = {
+                    "choix_joueur": None,
+                    "choix_ordi": None,
+                    "resultat": None,
+                    "manche_terminee": False,
+                }
         elif etat_jeu == "partie":
-            nouvel_etat, nouveau_choix = gerer_partie(
+            nouvel_etat, etat_partie = gerer_partie(
                 ecran,
                 police_bouton,
                 pos_souris,
                 pygame.mouse.get_pressed()[0],
                 evenements,
-                choix_joueur,
+                etat_partie,
             )
             etat_jeu = nouvel_etat
-            choix_joueur = nouveau_choix
 
         pygame.display.flip()
         horloge.tick(60)
