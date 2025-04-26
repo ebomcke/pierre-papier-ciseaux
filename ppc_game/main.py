@@ -4,9 +4,6 @@ from .utils import WINDOW_WIDTH, WINDOW_HEIGHT
 from .ecran_accueil import gerer_accueil
 from .ecran_partie import gerer_partie
 
-# Constantes pour la taille de la fenêtre
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 800
 
 # Couleurs
 WHITE = (255, 255, 255)

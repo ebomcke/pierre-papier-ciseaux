@@ -1,9 +1,19 @@
 import pygame
 from .ui import dessiner_bouton
-from .utils import WHITE, BLACK, WINDOW_WIDTH, WINDOW_HEIGHT
+from .utils import WHITE, BLACK, WINDOW_WIDTH, WINDOW_HEIGHT, charger_image
 
 
 def gerer_accueil(ecran, police, police_bouton, pos_souris, clic_souris, evenements):
+    # Chargement paresseux de l'image de fond
+    if not hasattr(gerer_accueil, "bg_img"):
+        gerer_accueil.bg_img = charger_image(
+            "banana_Sam.png", size=(WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+    bg_img = gerer_accueil.bg_img
+    if bg_img is not None:
+        ecran.blit(bg_img, (0, 0))
+    else:
+        ecran.fill(WHITE)
     # Création du bouton
     largeur_bouton, hauteur_bouton = 350, 80
     rect_bouton = pygame.Rect(
@@ -12,7 +22,6 @@ def gerer_accueil(ecran, police, police_bouton, pos_souris, clic_souris, eveneme
         largeur_bouton,
         hauteur_bouton,
     )
-    ecran.fill(WHITE)
     # Afficher le titre
     surf_titre = police.render("Pierre Papier Ciseaux", True, BLACK)
     rect_titre = surf_titre.get_rect(

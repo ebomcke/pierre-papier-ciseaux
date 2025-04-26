@@ -2,8 +2,8 @@ import os
 import pygame
 
 # Constantes pour la taille de la fenêtre
-WINDOW_WIDTH = 1280
-WINDOW_HEIGHT = 800
+WINDOW_WIDTH = 1024
+WINDOW_HEIGHT = 1024
 
 # Couleurs
 WHITE = (255, 255, 255)
