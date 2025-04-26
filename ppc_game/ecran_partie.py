@@ -44,9 +44,16 @@ def afficher_attente_choix(
         gear_rotated = pygame.transform.rotate(gear_img, angle)
         gear_rect = gear_rotated.get_rect(center=(gear_center_x, gear_center_y))
         ecran.blit(gear_rotated, gear_rect)
-    # Affichage des boutons de choix
+    # Affichage des boutons de choix avec images
+    if not hasattr(gerer_partie, "choix_images"):
+        gerer_partie.choix_images = [
+            charger_image("pierre.png", size=(80, 80)),
+            charger_image("papier.png", size=(80, 80)),
+            charger_image("ciseaux.png", size=(80, 80)),
+        ]
+    choix_images = gerer_partie.choix_images
     dessiner_choix(
-        ecran, rects_choix, choix_textes, police_bouton, pos_souris, clic_souris
+        ecran, rects_choix, choix_images, police_bouton, pos_souris, clic_souris
     )
     # Gestion du clic sur un choix
     for evenement in evenements:
@@ -152,20 +159,21 @@ def afficher_resultat(
 def gerer_partie(
     ecran, police_bouton, pos_souris, clic_souris, evenements, etat_partie
 ):
-    # Préparation des boutons de choix
+    # Préparation des boutons de choix (cercles)
     choix_textes = ["pierre", "papier", "ciseaux"]
     nb_choix = len(choix_textes)
-    largeur_choix, hauteur_choix = 200, 100
-    espacement = 60
-    total_largeur = nb_choix * largeur_choix + (nb_choix - 1) * espacement
+    diametre_choix = 140
+    rayon_choix = diametre_choix // 2
+    espacement = 80
+    total_largeur = nb_choix * diametre_choix + (nb_choix - 1) * espacement
     x_depart = (WINDOW_WIDTH - total_largeur) // 2
-    y_choix = WINDOW_HEIGHT - hauteur_choix - 40
+    y_choix = WINDOW_HEIGHT - diametre_choix - 40
     rects_choix = [
         pygame.Rect(
-            x_depart + i * (largeur_choix + espacement),
+            x_depart + i * (diametre_choix + espacement),
             y_choix,
-            largeur_choix,
-            hauteur_choix,
+            diametre_choix,
+            diametre_choix,
         )
         for i in range(nb_choix)
     ]
