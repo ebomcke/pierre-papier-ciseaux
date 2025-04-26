@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "ppc-game"
+version = "0.1.0"
+description = ""
+authors = ["Etienne Bömcke <etienne@awellhealth.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pygame = "^2.6.1"
+
+[tool.poetry.scripts]
+ppc-game = "ppc_game.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
